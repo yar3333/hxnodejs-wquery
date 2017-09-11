@@ -8,7 +8,7 @@ export class Application
 
 export class Component
 {
-	constructor(app:Application, parent:Component, nodeToReplace:js.html.Element, params:any);
+	constructor(parent:Component, parentNode:js.html.Element, params?:any, replaceParentNode?:boolean, app?:Application);
 	app : Application;
 	parent : Component;
 	id : string;
@@ -27,7 +27,7 @@ export class ComponentTools
 	private static processSubstitution(s:string, object:any) : string;
 	static expandDocElemIDs(prefixID:string, baseNode:GenericHtmlElement) : void;
 	static htmlStringToDocumentFragment(html:string) : js.html.DocumentFragment;
-	static createChildren(app:Application, parent:Component, node:GenericHtmlElement, imports:any) : Component[];
+	static createChildren(parent:Component, node:GenericHtmlElement, imports:any) : Component[];
 	static loadFieldValues(component:Component, params:any) : void;
 	private static convertValueType(rawValue:any, typedValue:any) : any;
 	private static getElementAttributesAsObject(element:js.html.Element) : any;

@@ -2,7 +2,7 @@ package wquery;
 
 @:autoBuild(wquery.Macro.buildComponent()) @:jsRequire("wquery", "Component") extern class Component
 {
-	function new(app:wquery.Application, parent:wquery.Component, nodeToReplace:js.html.Element, params:Dynamic) : Void;
+	function new(parent:wquery.Component, parentNode:js.html.Element, ?params:Dynamic, ?replaceParentNode:Bool, ?app:wquery.Application) : Void;
 	var app(default, null) : wquery.Application;
 	var parent(default, null) : wquery.Component;
 	var id(default, null) : String;
