@@ -6,5 +6,5 @@ package wquery;
 	private var handlers : Array<EventArgsType -> Void>;
 	function on(handler:EventArgsType -> Void) : Void;
 	function off(?handler:EventArgsType -> Void) : Void;
-	function fire(args:EventArgsType) : Void;
+	function emit(args:EventArgsType) : Void;
 }

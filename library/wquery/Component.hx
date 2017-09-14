@@ -2,8 +2,8 @@ package wquery;
 
 @:autoBuild(wquery.Macro.buildComponent()) @:jsRequire("wquery", "Component") extern class Component
 {
-	function new(parent:wquery.Component, parentNode:js.html.Element, ?params:Dynamic, ?replaceParentNode:Bool, ?app:wquery.Application) : Void;
-	var app(default, null) : wquery.Application;
+	function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<js.html.Element, wquery.JQuery>, ?params:Dynamic, ?replaceParentNode:Bool) : Void;
+	var page(default, null) : wquery.Component;
 	var parent(default, null) : wquery.Component;
 	var id(default, null) : String;
 	var fullID(default, null) : String;

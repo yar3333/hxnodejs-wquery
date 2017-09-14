@@ -2,8 +2,7 @@ package wquery;
 
 @:jsRequire("wquery", "Template") extern class Template
 {
-	function new(app:wquery.Application, klassName:String) : Void;
-	private var app : wquery.Application;
+	function new(klassName:String) : Void;
 	private var doc : js.html.DocumentFragment;
 	private var preparedDoc : js.html.DocumentFragment;
 	var css(default, null) : String;

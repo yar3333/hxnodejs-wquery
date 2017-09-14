@@ -484,28 +484,22 @@ js_Boot.__nativeClassName = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
-var wquery_Application = $hx_exports["Application"] = function() {
-	this.templates = { };
-};
+var wquery_Application = $hx_exports["Application"] = function() { };
 $hxClasses["wquery.Application"] = wquery_Application;
 wquery_Application.__name__ = ["wquery","Application"];
-wquery_Application.run = function(selector,componentClass) {
-	return Type.createInstance(componentClass,[null,$(selector)[0],null,true,new wquery_Application()]);
-};
-wquery_Application.prototype = {
-	getTemplate: function(fullTag) {
-		if(!Object.prototype.hasOwnProperty.call(this.templates,fullTag)) {
-			this.templates[fullTag] = new wquery_Template(this,fullTag);
-		}
-		return Reflect.field(this.templates,fullTag);
+wquery_Application.getTemplate = function(fullTag) {
+	if(!Object.prototype.hasOwnProperty.call(wquery_Application.templates,fullTag)) {
+		wquery_Application.templates[fullTag] = new wquery_Template(fullTag);
 	}
-	,__class__: wquery_Application
+	return Reflect.field(wquery_Application.templates,fullTag);
 };
-var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,replaceParentNode,app) {
+wquery_Application.run = function(selector,componentClass) {
+	return Type.createInstance(componentClass,[null,$(selector),null,true]);
+};
+var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,replaceParentNode) {
 	this.nextAnonimID = 0;
 	this.children = { };
 	this.id = "";
-	this.app = app != null ? app : parent.app;
 	wquery_ComponentTools.loadFieldValues(this,params);
 	if(this.id == null || this.id == "") {
 		this.id = parent != null ? "wqc_" + ++parent.nextAnonimID : "";
@@ -513,6 +507,7 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 		var n = this.id.lastIndexOf("-");
 		this.id = this.id.substring(n + 1);
 	}
+	this.page = parent != null ? parent.page : this;
 	this.parent = parent;
 	this.fullID = (parent != null ? parent.prefixID : "") + this.id;
 	this.prefixID = this.fullID != "" ? this.fullID + "-" : "";
@@ -523,7 +518,7 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 		parent.children[this.id] = this;
 	}
 	var klassName = Type.getClassName(js_Boot.getClass(this));
-	var template = this.app.getTemplate(klassName);
+	var template = wquery_Application.getTemplate(klassName);
 	wquery_ComponentTools.ensureStylesActive(klassName,template.css);
 	var node = template.newDoc();
 	wquery_ComponentTools.processSubstitutions(node,this);
@@ -534,6 +529,9 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 	wquery_ComponentTools.callMethodIfExists(this,"preInit");
 	wquery_ComponentTools.createChildren(this,node,template.imports);
 	wquery_ComponentTools.callMethodIfExists(this,"init");
+	if(Object.prototype.hasOwnProperty.call(parentNode,"length")) {
+		parentNode = parentNode[0];
+	}
 	if(replaceParentNode) {
 		parentNode.parentNode.replaceChild(node,parentNode);
 	} else {
@@ -850,7 +848,7 @@ wquery_Event.prototype = {
 			this.handlers = [];
 		}
 	}
-	,fire: function(args) {
+	,emit: function(args) {
 		var _g = 0;
 		var _g1 = this.handlers;
 		while(_g < _g1.length) {
@@ -915,8 +913,7 @@ wquery_EventTools.attachComponentEventHandlers = function(component) {
 		}
 	}
 };
-var wquery_Template = $hx_exports["Template"] = function(app,klassName) {
-	this.app = app;
+var wquery_Template = $hx_exports["Template"] = function(klassName) {
 	var klass = Type.resolveClass(klassName);
 	if(klass == null) {
 		throw new Error("Class '" + klassName + "' is not found.");
@@ -924,7 +921,7 @@ var wquery_Template = $hx_exports["Template"] = function(app,klassName) {
 	var superKlass = Type.getSuperClass(klass);
 	this.extend = superKlass != null ? Type.getClassName(superKlass) : "";
 	this.imports = wquery_Template.getImports(klass,superKlass);
-	this.doc = wquery_Template.getDoc(klass,this.extend != "" ? app.getTemplate(this.extend) : null);
+	this.doc = wquery_Template.getDoc(klass,this.extend != "" ? wquery_Application.getTemplate(this.extend) : null);
 	this.preparedDoc = this.doc.cloneNode(true);
 	wquery_Template.resolvePlaceHolders(this.preparedDoc);
 	this.css = wquery_Template.processStyles(klassName,this.preparedDoc);
@@ -983,11 +980,11 @@ wquery_Template.getRawDoc = function(klass) {
 	return r;
 };
 wquery_Template.resolvePlaceHolders = function(doc) {
-	var contents = wquery_Template.getImmediateChildren(doc,"CONTENT");
+	var contents = wquery_Template.getImmediateChildren(doc,"WQ-CONTENT");
 	contents.reverse();
 	var ph;
 	while(true) {
-		ph = doc.querySelector("placeholder");
+		ph = doc.querySelector("wq-placeholder");
 		if(!(ph != null)) {
 			break;
 		}
@@ -1058,5 +1055,6 @@ String.__name__ = ["String"];
 $hxClasses["Array"] = Array;
 Array.__name__ = ["Array"];
 js_Boot.__toStr = ({ }).toString;
+wquery_Application.templates = { };
 wquery_EventTools.elemEventNames = ["click","change","load","mousedown","mouseup","mousemove","mouseover","mouseout","mouseenter","mouseleave","keypress","keydown","keyup","focus","blur","focusin","focusout"];
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
