@@ -503,11 +503,13 @@ wquery_Application.getTemplate = function(fullTag) {
 wquery_Application.run = function(selector,componentClass) {
 	return Type.createInstance(componentClass,[null,$(selector),null,true]);
 };
-var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,replaceParentNode) {
+var wquery_Component = $hx_exports["Component"] = function(parent,_parentNode,params,replaceParentNode) {
 	this.nextAnonimID = 0;
 	this.children = { };
 	this.id = "";
+	this.parentNode = $(_parentNode);
 	wquery_ComponentTools.loadFieldValues(this,params);
+	this.parentNode = $(this.parentNode);
 	if(this.id == null || this.id == "") {
 		this.id = parent != null ? "wqc_" + ++parent.nextAnonimID : "";
 	} else {
@@ -536,13 +538,10 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 	wquery_ComponentTools.callMethodIfExists(this,"preInit");
 	wquery_ComponentTools.createChildren(this,node,template.imports);
 	wquery_ComponentTools.callMethodIfExists(this,"init");
-	if(Object.prototype.hasOwnProperty.call(parentNode,"length")) {
-		parentNode = parentNode[0];
-	}
 	if(replaceParentNode) {
-		parentNode.parentNode.replaceChild(node,parentNode);
+		this.parentNode[0].parentNode.replaceChild(node,this.parentNode[0]);
 	} else {
-		parentNode.appendChild(node);
+		this.parentNode[0].appendChild(node);
 	}
 	wquery_ComponentTools.callMethodIfExists(this,"postInit");
 };

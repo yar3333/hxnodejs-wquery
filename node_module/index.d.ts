@@ -5,9 +5,10 @@ export class Application
 
 export class Component
 {
-	constructor(parent:Component, parentNode:(Element|JQuery), params?:any, replaceParentNode?:boolean);
+	constructor(parent:Component, _parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, replaceParentNode?:boolean);
 	page : Component;
 	parent : Component;
+	parentNode : JQuery;
 	id : string;
 	fullID : string;
 	prefixID : string;
@@ -15,8 +16,8 @@ export class Component
 	private nextAnonimID : number;
 	private nodes : JQuery;
 	private template() : { };
-	private q(arg:any, context?:any) : JQuery;
 	remove() : void;
+	private q(arg:any, context?:any) : JQuery;
 }
 
 export class ComponentList<T>
