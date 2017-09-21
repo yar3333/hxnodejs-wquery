@@ -5,10 +5,9 @@ export class Application
 
 export class Component
 {
-	constructor(parent:Component, _parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, replaceParentNode?:boolean);
+	constructor(parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, replaceParentNode?:boolean);
 	page : Component;
 	parent : Component;
-	parentNode : JQuery;
 	id : string;
 	fullID : string;
 	prefixID : string;
@@ -18,13 +17,17 @@ export class Component
 	private template() : { };
 	remove() : void;
 	private q(arg:any, context?:any) : JQuery;
+	private attachNode(node:js.html.DocumentFragment, parentNode:JQuery, replaceParentNode:boolean) : void;
 }
 
 export class ComponentList<T>
 {
 	constructor(type:Class<T>, parentComponent:Component, parentNode:JQuery, paramsList?:any[]);
+	length : number;
 	create(params?:any) : T;
 	clear() : void;
+	iterator() : Iterator<T>;
+	getByIndex(n:number) : T;
 }
 
 export class CssGlobalizer

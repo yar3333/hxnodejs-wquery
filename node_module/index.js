@@ -503,13 +503,11 @@ wquery_Application.getTemplate = function(fullTag) {
 wquery_Application.run = function(selector,componentClass) {
 	return Type.createInstance(componentClass,[null,$(selector),null,true]);
 };
-var wquery_Component = $hx_exports["Component"] = function(parent,_parentNode,params,replaceParentNode) {
+var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,replaceParentNode) {
 	this.nextAnonimID = 0;
 	this.children = { };
 	this.id = "";
-	this.parentNode = $(_parentNode);
 	wquery_ComponentTools.loadFieldValues(this,params);
-	this.parentNode = $(this.parentNode);
 	if(this.id == null || this.id == "") {
 		this.id = parent != null ? "wqc_" + ++parent.nextAnonimID : "";
 	} else {
@@ -538,11 +536,7 @@ var wquery_Component = $hx_exports["Component"] = function(parent,_parentNode,pa
 	wquery_ComponentTools.callMethodIfExists(this,"preInit");
 	wquery_ComponentTools.createChildren(this,node,template.imports);
 	wquery_ComponentTools.callMethodIfExists(this,"init");
-	if(replaceParentNode) {
-		this.parentNode[0].parentNode.replaceChild(node,this.parentNode[0]);
-	} else {
-		this.parentNode[0].appendChild(node);
-	}
+	this.attachNode(node,$(parentNode),replaceParentNode);
 	wquery_ComponentTools.callMethodIfExists(this,"postInit");
 };
 $hxClasses["wquery.Component"] = wquery_Component;
@@ -571,9 +565,17 @@ wquery_Component.prototype = {
 		}
 		return cssGlobalizer.fixJq(context == null ? $(arg,this.nodes).addBack(arg) : $(arg,context));
 	}
+	,attachNode: function(node,parentNode,replaceParentNode) {
+		if(replaceParentNode) {
+			parentNode[0].parentNode.replaceChild(node,parentNode[0]);
+		} else {
+			parentNode[0].appendChild(node);
+		}
+	}
 	,__class__: wquery_Component
 };
 var wquery_ComponentList = $hx_exports["ComponentList"] = function(type,parentComponent,parentNode,paramsList) {
+	this.length = 0;
 	this.components = [];
 	this.type = type;
 	this.parentComponent = parentComponent;
@@ -594,6 +596,7 @@ wquery_ComponentList.prototype = {
 	create: function(params) {
 		var r = Type.createInstance(this.type,[this.parentComponent,this.parentNode,params]);
 		this.components.push(r);
+		this.length++;
 		return r;
 	}
 	,clear: function() {
@@ -609,9 +612,13 @@ wquery_ComponentList.prototype = {
 		}
 		this.components.splice(0,this.components.length);
 		this.parentNode.html(this.emptyContent);
+		this.length = 0;
 	}
 	,iterator: function() {
 		return HxOverrides.iter(this.components);
+	}
+	,getByIndex: function(n) {
+		return this.components[n];
 	}
 	,__class__: wquery_ComponentList
 };
