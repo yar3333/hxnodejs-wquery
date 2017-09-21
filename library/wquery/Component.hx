@@ -12,5 +12,6 @@ package wquery;
 	private var nextAnonimID : Int;
 	private var nodes : wquery.JQuery;
 	private function template() : { };
+	function remove() : Void;
 	private function q(arg:Dynamic, ?context:Dynamic) : wquery.JQuery;
 }

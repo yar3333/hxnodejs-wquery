@@ -174,6 +174,13 @@ Reflect.isFunction = function(f) {
 		return false;
 	}
 };
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) {
+		return false;
+	}
+	delete(o[field]);
+	return true;
+};
 var Std = function() { };
 $hxClasses["Std"] = Std;
 Std.__name__ = ["Std"];
@@ -545,6 +552,19 @@ wquery_Component.prototype = {
 	template: function() {
 		return null;
 	}
+	,remove: function() {
+		if(this.parent != null && this.parent.children != null) {
+			var _g = 0;
+			var _g1 = Reflect.fields(this.parent.children);
+			while(_g < _g1.length) {
+				var key = _g1[_g];
+				++_g;
+				if(Reflect.field(this.parent.children,key) == this) {
+					Reflect.deleteField(this.parent.children,key);
+				}
+			}
+		}
+	}
 	,q: function(arg,context) {
 		var cssGlobalizer = new wquery_CssGlobalizer(Type.getClassName(js_Boot.getClass(this)));
 		if(arg != null && arg != "" && typeof(arg) == "string") {
@@ -553,6 +573,48 @@ wquery_Component.prototype = {
 		return cssGlobalizer.fixJq(context == null ? $(arg,this.nodes).addBack(arg) : $(arg,context));
 	}
 	,__class__: wquery_Component
+};
+var wquery_ComponentList = $hx_exports["ComponentList"] = function(type,parentComponent,parentNode,paramsList) {
+	this.components = [];
+	this.type = type;
+	this.parentComponent = parentComponent;
+	this.parentNode = parentNode;
+	this.emptyContent = parentNode.html();
+	if(paramsList != null) {
+		var _g = 0;
+		while(_g < paramsList.length) {
+			var params = paramsList[_g];
+			++_g;
+			this.create(params);
+		}
+	}
+};
+$hxClasses["wquery.ComponentList"] = wquery_ComponentList;
+wquery_ComponentList.__name__ = ["wquery","ComponentList"];
+wquery_ComponentList.prototype = {
+	create: function(params) {
+		var r = Type.createInstance(this.type,[this.parentComponent,this.parentNode,params]);
+		this.components.push(r);
+		return r;
+	}
+	,clear: function() {
+		if(this.components.length == 0) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.components;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			c.remove();
+		}
+		this.components.splice(0,this.components.length);
+		this.parentNode.html(this.emptyContent);
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.components);
+	}
+	,__class__: wquery_ComponentList
 };
 var wquery_ComponentTools = $hx_exports["ComponentTools"] = function() { };
 $hxClasses["wquery.ComponentTools"] = wquery_ComponentTools;
