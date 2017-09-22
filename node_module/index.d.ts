@@ -3,9 +3,11 @@ export class Application
 	static run(selector:any, componentClass:Class<Component>) : Component;
 }
 
+type AttachMode = ("append" | "prepend" | "replace");
+
 export class Component
 {
-	constructor(parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, replaceParentNode?:boolean);
+	constructor(parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, attachMode?:AttachMode);
 	page : Component;
 	parent : Component;
 	id : string;
@@ -17,14 +19,14 @@ export class Component
 	private template() : { };
 	remove() : void;
 	private q(arg:any, context?:any) : JQuery;
-	private attachNode(node:js.html.DocumentFragment, parentNode:JQuery, replaceParentNode:boolean) : void;
+	private attachNode(node:js.html.DocumentFragment, parentNode:JQuery, attachMode:AttachMode) : void;
 }
 
 export class ComponentList<T>
 {
 	constructor(type:Class<T>, parentComponent:Component, parentNode:JQuery, paramsList?:any[]);
 	length : number;
-	create(params?:any) : T;
+	create(params?:any, append?:boolean) : T;
 	clear() : void;
 	iterator() : Iterator<T>;
 	getByIndex(n:number) : T;

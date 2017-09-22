@@ -9,7 +9,7 @@ package wquery;
 	private var emptyContent : String;
 	private var components : Array<T>;
 	var length(default, null) : Int;
-	function create(?params:Dynamic) : T;
+	function create(?params:Dynamic, ?append:Bool) : T;
 	function clear() : Void;
 	function iterator() : Iterator<T>;
 	function getByIndex(n:Int) : T;
