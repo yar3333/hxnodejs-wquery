@@ -501,8 +501,8 @@ wquery_Application.getTemplate = function(fullTag) {
 	}
 	return Reflect.field(wquery_Application.templates,fullTag);
 };
-wquery_Application.run = function(selector,componentClass) {
-	return Type.createInstance(componentClass,[null,$(selector),null,"replace"]);
+wquery_Application.run = function(selector,componentClass,params) {
+	return Type.createInstance(componentClass,[null,$(selector),params,"replace"]);
 };
 var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,attachMode) {
 	this.nextAnonimID = 0;
