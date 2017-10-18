@@ -13,4 +13,7 @@ package wquery;
 	static function callMethodIfExists(obj:Dynamic, methodName:String, ?args:Array<Dynamic>) : Void;
 	static function ensureStylesActive(klassName:String, css:String) : Void;
 	static function createStyleElement(styleBlockID:String, css:String) : js.html.StyleElement;
+	private static var classNames : haxe.ds.ObjectMap<Dynamic, String>;
+	private static var classNameCounter : Int;
+	static function getClassName(klass:Class<wquery.Component>) : String;
 }

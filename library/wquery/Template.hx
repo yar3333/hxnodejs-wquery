@@ -2,11 +2,10 @@ package wquery;
 
 @:jsRequire("wquery", "Template") extern class Template
 {
-	function new(klassName:String) : Void;
+	function new(klass:Class<wquery.Component>) : Void;
 	private var doc : js.html.DocumentFragment;
 	private var preparedDoc : js.html.DocumentFragment;
 	var css(default, null) : String;
-	private var extend(default, null) : String;
 	var imports(default, null) : Dynamic<wquery.Component>;
 	function newDoc() : js.html.DocumentFragment;
 	private static function getImports(klass:Class<wquery.Component>, superKlass:Class<wquery.Component>) : Dynamic<wquery.Component>;

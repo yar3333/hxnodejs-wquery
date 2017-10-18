@@ -1,7 +1,7 @@
 export class Application
 {
-	private static templates : any;
-	private static getTemplate(fullTag:string) : Template;
+	private static templates : haxe.ds.ObjectMap<any, Template>;
+	private static getTemplate(klass:Class<Component>) : Template;
 	static run(selector:any, componentClass:Class<Component>, params?:any) : Component;
 }
 
@@ -22,6 +22,12 @@ export class Component
 	remove() : void;
 	private q(arg:any, context?:any) : JQuery;
 	private attachNode(node:js.html.DocumentFragment, parentNode:JQuery, attachMode:AttachMode) : void;
+}
+
+export class ComponentInitializationException
+{
+	constructor(message:string);
+	message : string;
 }
 
 export class ComponentList<T>
@@ -52,6 +58,9 @@ export class ComponentTools
 	static callMethodIfExists(obj:any, methodName:string, args?:any[]) : void;
 	static ensureStylesActive(klassName:string, css:string) : void;
 	static createStyleElement(styleBlockID:string, css:string) : js.html.StyleElement;
+	private static classNames : haxe.ds.ObjectMap<any, string>;
+	private static classNameCounter : number;
+	static getClassName(klass:Class<Component>) : string;
 }
 
 export class CssGlobalizer
@@ -93,11 +102,10 @@ type JqEvent = js.jquery.Event;
 
 export class Template
 {
-	constructor(klassName:string);
+	constructor(klass:Class<Component>);
 	private doc : js.html.DocumentFragment;
 	private preparedDoc : js.html.DocumentFragment;
 	css : string;
-	private extend : string;
 	imports : any;
 	newDoc() : js.html.DocumentFragment;
 	private static getImports(klass:Class<Component>, superKlass:Class<Component>) : any;
