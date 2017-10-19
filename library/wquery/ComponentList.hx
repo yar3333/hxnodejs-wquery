@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "ComponentList") extern class ComponentList<T>
+@:jsRequire("wquery", "ComponentList") extern class ComponentList<T:wquery.Component>
 {
 	function new(type:Class<T>, parentComponent:wquery.Component, parentNode:wquery.JQuery, ?paramsList:Array<Dynamic>) : Void;
 	private var type : Class<T>;

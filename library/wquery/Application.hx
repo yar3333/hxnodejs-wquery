@@ -6,5 +6,5 @@ package wquery;
 	@:allow(wquery.Component)
 	@:allow(wquery.Template)
 	private static function getTemplate(klass:Class<wquery.Component>) : wquery.Template;
-	static function run(selector:Dynamic, componentClass:Class<wquery.Component>, ?params:Dynamic) : wquery.Component;
+	static function run<T:wquery.Component>(selector:Dynamic, componentClass:Class<T>, ?params:Dynamic) : T;
 }

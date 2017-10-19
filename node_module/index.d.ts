@@ -2,7 +2,7 @@ export class Application
 {
 	private static templates : haxe.ds.ObjectMap<any, Template>;
 	private static getTemplate(klass:Class<Component>) : Template;
-	static run(selector:any, componentClass:Class<Component>, params?:any) : Component;
+	static run<T:Component>(selector:any, componentClass:Class<T>, params?:any) : T;
 }
 
 type AttachMode = string;
@@ -30,7 +30,7 @@ export class ComponentInitializationException
 	message : string;
 }
 
-export class ComponentList<T>
+export class ComponentList<T:Component>
 {
 	constructor(type:Class<T>, parentComponent:Component, parentNode:JQuery, paramsList?:any[]);
 	private type : Class<T>;
