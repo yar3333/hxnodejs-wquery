@@ -722,7 +722,7 @@ wquery_ComponentList.prototype = {
 		if(append == null) {
 			append = true;
 		}
-		var r = Type.createInstance(this.type,[this.parentComponent,this.parentNode,params,append ? "append" : "prepend"]);
+		var r = wquery_Component.create(this.type,this.parentComponent,this.parentNode,params,append ? "append" : "prepend");
 		this.components.push(r);
 		this.length++;
 		return r;
