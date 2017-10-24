@@ -2,6 +2,7 @@ package wquery;
 
 @:autoBuild(wquery.Macro.buildComponent()) @:jsRequire("wquery", "Component") extern class Component
 {
+	private function new(parent:wquery.Component, parentNode:haxe.extern.EitherType<String, haxe.extern.EitherType<js.html.Element, wquery.JQuery>>, ?params:Dynamic, ?attachMode:wquery.AttachMode) : Void;
 	var page(default, null) : wquery.Component;
 	var parent(default, null) : wquery.Component;
 	var id(default, null) : String;

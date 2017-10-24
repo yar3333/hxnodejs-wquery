@@ -9,6 +9,7 @@ type AttachMode = string;
 
 export class Component
 {
+	private constructor(parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, attachMode?:AttachMode);
 	page : Component;
 	parent : Component;
 	id : string;

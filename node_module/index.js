@@ -360,6 +360,33 @@ haxe_ds_ObjectMap.prototype = {
 	}
 	,__class__: haxe_ds_ObjectMap
 };
+var haxe_ds_StringMap = function() {
+	this.h = { };
+};
+haxe_ds_StringMap.__name__ = ["haxe","ds","StringMap"];
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	setReserved: function(key,value) {
+		if(this.rh == null) {
+			this.rh = { };
+		}
+		this.rh["$" + key] = value;
+	}
+	,getReserved: function(key) {
+		if(this.rh == null) {
+			return null;
+		} else {
+			return this.rh["$" + key];
+		}
+	}
+	,existsReserved: function(key) {
+		if(this.rh == null) {
+			return false;
+		}
+		return this.rh.hasOwnProperty("$" + key);
+	}
+	,__class__: haxe_ds_StringMap
+};
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
 	this.val = val;
@@ -804,23 +831,60 @@ wquery_ComponentTools.loadFieldValues = function(component,params) {
 	if(params == null) {
 		return;
 	}
+	var lcComponentFields = new haxe_ds_StringMap();
 	var _g = 0;
-	var _g1 = Reflect.fields(params);
+	var _g1 = Reflect.fields(component);
 	while(_g < _g1.length) {
 		var field = _g1[_g];
 		++_g;
-		var value = Reflect.field(params,field);
-		if(Reflect.isFunction(Reflect.field(component,"set_" + field))) {
-			if(!Reflect.isFunction(Reflect.field(component,"get_" + field))) {
-				throw new Error("Load values: getter for '" + field + "' must be defined in class '" + Type.getClassName(component == null ? null : js_Boot.getClass(component)) + "'.");
-			}
-			var func = Reflect.field(component,"set_" + field);
-			var args = [wquery_ComponentTools.convertValueType(value,Reflect.field(component,"get_" + field).apply(component,[]))];
-			func.apply(component,args);
-		} else if(Object.prototype.hasOwnProperty.call(component,field)) {
-			component[field] = wquery_ComponentTools.convertValueType(value,Reflect.field(component,field));
+		var key = field.toLowerCase();
+		if(__map_reserved[key] != null) {
+			lcComponentFields.setReserved(key,field);
 		} else {
-			throw new Error("Load values: class '" + wquery_ComponentTools.getClassName(component == null ? null : js_Boot.getClass(component)) + "' does not have field '" + field + "'.");
+			lcComponentFields.h[key] = field;
+		}
+	}
+	var _g2 = 0;
+	var _g11 = Reflect.fields(params);
+	while(_g2 < _g11.length) {
+		var originalCaseField = _g11[_g2];
+		++_g2;
+		var value = Reflect.field(params,originalCaseField);
+		var field1;
+		var key1 = originalCaseField.toLowerCase();
+		if(__map_reserved[key1] != null ? lcComponentFields.existsReserved(key1) : lcComponentFields.h.hasOwnProperty(key1)) {
+			var key2 = originalCaseField.toLowerCase();
+			field1 = __map_reserved[key2] != null ? lcComponentFields.getReserved(key2) : lcComponentFields.h[key2];
+		} else {
+			field1 = originalCaseField;
+		}
+		var setterName;
+		var key3 = "set_" + field1;
+		if(__map_reserved[key3] != null ? lcComponentFields.existsReserved(key3) : lcComponentFields.h.hasOwnProperty(key3)) {
+			var key4 = "set_" + field1;
+			setterName = __map_reserved[key4] != null ? lcComponentFields.getReserved(key4) : lcComponentFields.h[key4];
+		} else {
+			setterName = "set_" + field1;
+		}
+		var getterName;
+		var key5 = "get_" + field1;
+		if(__map_reserved[key5] != null ? lcComponentFields.existsReserved(key5) : lcComponentFields.h.hasOwnProperty(key5)) {
+			var key6 = "get_" + field1;
+			getterName = __map_reserved[key6] != null ? lcComponentFields.getReserved(key6) : lcComponentFields.h[key6];
+		} else {
+			getterName = "get_" + field1;
+		}
+		if(Reflect.isFunction(Reflect.field(component,setterName))) {
+			if(!Reflect.isFunction(Reflect.field(component,getterName))) {
+				throw new Error("Load values: getter for '" + field1 + "' must be defined in class '" + wquery_ComponentTools.getClassName(component == null ? null : js_Boot.getClass(component)) + "'.");
+			}
+			var func = Reflect.field(component,setterName);
+			var args = [wquery_ComponentTools.convertValueType(value,Reflect.field(component,getterName).apply(component,[]))];
+			func.apply(component,args);
+		} else if(Object.prototype.hasOwnProperty.call(component,field1)) {
+			component[field1] = wquery_ComponentTools.convertValueType(value,Reflect.field(component,field1));
+		} else {
+			throw new Error("Load values: class '" + wquery_ComponentTools.getClassName(component == null ? null : js_Boot.getClass(component)) + "' does not have field '" + originalCaseField + "'.");
 		}
 	}
 };
@@ -1258,6 +1322,7 @@ var Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
+var __map_reserved = {}
 var q = window.jQuery;
 var js = js || {}
 js.JQuery = q;
