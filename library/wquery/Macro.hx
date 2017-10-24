@@ -24,7 +24,7 @@ class Macro
 		
 		if (sys.FileSystem.exists(dir + "template.css") && !fields.exists(function(f) return f.name == "rawCSS"))
 		{
-		fields.push(makeStaticVar("rawCSS", macro : String, macro $v{sys.io.File.getContent(dir + "template.css")}));
+			fields.push(makeStaticVar("rawCSS", macro : String, macro $v{sys.io.File.getContent(dir + "template.css")}));
 		}
 		
 		if (sys.FileSystem.exists(dir + "Template.hx") && !fields.exists(function(f) return f.name == "template"))

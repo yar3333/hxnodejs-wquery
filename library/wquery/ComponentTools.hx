@@ -16,4 +16,6 @@ package wquery;
 	private static var classNames : haxe.ds.ObjectMap<Dynamic, String>;
 	private static var classNameCounter : Int;
 	static function getClassName(klass:Class<wquery.Component>) : String;
+	static function callMethodFromParentToChildren(parent:wquery.Component, methodName:String) : Void;
+	static function callMethodFromChildrenToParent(parent:wquery.Component, methodName:String) : Void;
 }

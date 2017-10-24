@@ -5,7 +5,7 @@
   "main": "index.js",
   "keywords": [ "web", "framework", "component", "components" ],
   "scripts": {
-	"build": "haxelib run nodegen wquery wquery -hx ../library -js index.js -ts index.d.ts --raw-haxe-module file:raw-haxe-modules.list -- -lib wquery wquery.ComponentList"
+	"build": "haxelib run nodegen wquery wquery -hx ../library -js index.js -ts index.d.ts --raw-haxe-module file:raw-haxe-modules.list -- -lib wquery -lib jquery wquery.ComponentList"
   },
   "author": "yar3333",
   "license": "MIT"

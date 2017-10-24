@@ -9,7 +9,6 @@ type AttachMode = string;
 
 export class Component
 {
-	constructor(parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, attachMode?:AttachMode);
 	page : Component;
 	parent : Component;
 	id : string;
@@ -22,6 +21,7 @@ export class Component
 	remove() : void;
 	private q(arg:any, context?:any) : JQuery;
 	private attachNode(node:js.html.DocumentFragment, parentNode:JQuery, attachMode:AttachMode) : void;
+	static create<T:Component>(klass:Class<T>, parent:Component, parentNode:haxe.extern.EitherType<string, haxe.extern.EitherType<js.html.Element, JQuery>>, params?:any, attachMode?:AttachMode) : T;
 }
 
 export class ComponentInitializationException
@@ -61,6 +61,8 @@ export class ComponentTools
 	private static classNames : haxe.ds.ObjectMap<any, string>;
 	private static classNameCounter : number;
 	static getClassName(klass:Class<Component>) : string;
+	static callMethodFromParentToChildren(parent:Component, methodName:string) : void;
+	static callMethodFromChildrenToParent(parent:Component, methodName:string) : void;
 }
 
 export class CssGlobalizer
@@ -96,9 +98,9 @@ type GenericHtmlElement =
 	querySelectorAll(s:string) : js.html.NodeList;
 }
 
-type JQuery = js.jquery.JQuery;
+type JQuery = js.JQuery;
 
-type JqEvent = js.jquery.Event;
+type JqEvent = js.JQuery.JqEvent;
 
 export class Template
 {

@@ -577,7 +577,7 @@ wquery_Application.getTemplate = function(klass) {
 	return wquery_Application.templates.h[klass.__id__];
 };
 wquery_Application.run = function(selector,componentClass,params) {
-	return Type.createInstance(componentClass,[null,$(selector),params,"replace"]);
+	return wquery_Component.create(componentClass,null,js.JQuery(selector),params,"replace");
 };
 var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,params,attachMode) {
 	this.nextAnonimID = 0;
@@ -613,15 +613,18 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 	}
 	wquery_ComponentTools.expandDocElemIDs(this.prefixID,node);
 	wquery_EventTools.attachComponentEventHandlers(this);
-	this.nodes = $(node.childNodes);
+	this.nodes = js.JQuery(node.childNodes);
 	wquery_EventTools.attachHtmlEventHandlers(this,node,Reflect.fields(template.imports));
-	wquery_ComponentTools.callMethodIfExists(this,"preInit");
 	wquery_ComponentTools.createChildren(this,node,template.imports);
-	wquery_ComponentTools.callMethodIfExists(this,"init");
-	this.attachNode(node,$(parentNode),attachMode != null ? attachMode : "append");
-	wquery_ComponentTools.callMethodIfExists(this,"postInit");
+	this.attachNode(node,js.JQuery(parentNode),attachMode != null ? attachMode : "append");
 };
 wquery_Component.__name__ = ["wquery","Component"];
+wquery_Component.create = function(klass,parent,parentNode,params,attachMode) {
+	var r = Type.createInstance(klass,[parent,parentNode,params,attachMode]);
+	wquery_ComponentTools.callMethodFromParentToChildren(r,"preInit");
+	wquery_ComponentTools.callMethodFromChildrenToParent(r,"init");
+	return r;
+};
 wquery_Component.prototype = {
 	template: function() {
 		return null;
@@ -644,7 +647,7 @@ wquery_Component.prototype = {
 		if(arg != null && arg != "" && typeof(arg) == "string") {
 			arg = cssGlobalizer.selector(StringTools.replace(arg,"#","#" + this.prefixID));
 		}
-		return cssGlobalizer.fixJq(context == null ? $(arg,this.nodes).addBack(arg) : $(arg,context));
+		return cssGlobalizer.fixJq(context == null ? js.JQuery(arg,this.nodes).add(arg) : js.JQuery(arg,context));
 	}
 	,attachNode: function(node,parentNode,attachMode) {
 		switch(attachMode) {
@@ -788,6 +791,9 @@ wquery_ComponentTools.createChildren = function(parent,node,imports) {
 				var nodeToReplace = nodes[_g];
 				++_g;
 				var klass = Reflect.field(imports,nodeToReplace.nodeName.toLowerCase());
+				if(!js_Boot.__instanceof(klass,Class) && !Reflect.isFunction(klass)) {
+					throw new Error("Expected reference to component class in `" + wquery_ComponentTools.getClassName(parent == null ? null : js_Boot.getClass(parent)) + ".imports." + nodeToReplace.nodeName.toLowerCase() + "`.");
+				}
 				r.push(Type.createInstance(klass,[parent,nodeToReplace,wquery_ComponentTools.getElementAttributesAsObject(nodeToReplace),"replace"]));
 			}
 		}
@@ -901,6 +907,28 @@ wquery_ComponentTools.getClassName = function(klass) {
 	wquery_ComponentTools.classNameCounter++;
 	wquery_ComponentTools.classNames.set(klass,r);
 	return r;
+};
+wquery_ComponentTools.callMethodFromParentToChildren = function(parent,methodName) {
+	wquery_ComponentTools.callMethodIfExists(parent,methodName);
+	var _g = 0;
+	var _g1 = Reflect.fields(parent.children);
+	while(_g < _g1.length) {
+		var childID = _g1[_g];
+		++_g;
+		var child = Reflect.field(parent.children,childID);
+		wquery_ComponentTools.callMethodFromParentToChildren(child,methodName);
+	}
+};
+wquery_ComponentTools.callMethodFromChildrenToParent = function(parent,methodName) {
+	var _g = 0;
+	var _g1 = Reflect.fields(parent.children);
+	while(_g < _g1.length) {
+		var childID = _g1[_g];
+		++_g;
+		var child = Reflect.field(parent.children,childID);
+		wquery_ComponentTools.callMethodFromChildrenToParent(child,methodName);
+	}
+	wquery_ComponentTools.callMethodIfExists(parent,methodName);
 };
 var wquery_CssGlobalizer = $hx_exports["CssGlobalizer"] = function(klassName) {
 	this.prefix = StringTools.replace(klassName.toLowerCase(),".","_") + "-";
@@ -1055,7 +1083,7 @@ wquery_EventTools.attachHtmlEventHandlers = function(component,node,ignoreTags) 
 				var methodName = elemID + "_" + eventName;
 				var method = [Reflect.field(component,methodName)];
 				if(method[0] != null) {
-					$(elem).on(eventName,null,(function(method1) {
+					js.JQuery(elem).on(eventName,(function(method1) {
 						return function(e) {
 							method1[0].apply(component,[e]);
 						};
@@ -1127,7 +1155,7 @@ wquery_Template.getImports = function(klass,superKlass) {
 wquery_Template.getDoc = function(klass,superTemplate) {
 	var r = wquery_Template.getRawDoc(klass);
 	if(superTemplate != null) {
-		r.insertBefore(superTemplate.doc,r.firstChild);
+		r.insertBefore(superTemplate.doc.cloneNode(true),r.firstChild);
 	}
 	return r;
 };
@@ -1230,6 +1258,9 @@ var Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
+var q = window.jQuery;
+var js = js || {}
+js.JQuery = q;
 haxe_ds_ObjectMap.count = 0;
 js_Boot.__toStr = ({ }).toString;
 wquery_Application.templates = new haxe_ds_ObjectMap();
