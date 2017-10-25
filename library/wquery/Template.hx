@@ -18,4 +18,5 @@ package wquery;
 	private static function getImmediateChildren(base:wquery.GenericHtmlElement, tag:String) : Array<js.html.Element>;
 	private static function resolveUrlsInHtml(klass:Class<wquery.Component>, base:wquery.GenericHtmlElement) : Void;
 	private static function resolveUrlsInCss(klass:Class<wquery.Component>, css:String) : String;
+	private static function getUrlFromClass(klass:Class<wquery.Component>) : String;
 }

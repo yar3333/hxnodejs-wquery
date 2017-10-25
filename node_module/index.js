@@ -1313,7 +1313,7 @@ wquery_Template.resolveUrlsInHtml = function(klass,base) {
 			if(child.hasAttribute("src")) {
 				var value = child.getAttribute("src");
 				if(StringTools.startsWith(value,"~/")) {
-					child.setAttribute("src",wquery_Template.baseURL + StringTools.replace(Type.getClassName(klass),".","/") + value.substring(1));
+					child.setAttribute("src",wquery_Template.getUrlFromClass(klass) + value.substring(1));
 				}
 			}
 		} else if(child.tagName == "STYLE") {
@@ -1325,8 +1325,15 @@ wquery_Template.resolveUrlsInHtml = function(klass,base) {
 };
 wquery_Template.resolveUrlsInCss = function(klass,css) {
 	var _this_r = new RegExp("\\b(url\\s*[(]\\s*)~","ig".split("u").join(""));
-	var by = wquery_Template.baseURL + StringTools.replace(Type.getClassName(klass),".","/");
+	var by = wquery_Template.getUrlFromClass(klass);
 	return css.replace(_this_r,by);
+};
+wquery_Template.getUrlFromClass = function(klass) {
+	var r = Type.getClassName(klass);
+	var n = r.lastIndexOf(".");
+	r = r.substring(0,n);
+	r = StringTools.replace(r,".","/");
+	return wquery_Template.baseURL + r;
 };
 wquery_Template.prototype = {
 	newDoc: function() {

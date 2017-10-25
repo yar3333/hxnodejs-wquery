@@ -121,4 +121,5 @@ export class Template
 	private static getImmediateChildren(base:GenericHtmlElement, tag:string) : js.html.Element[];
 	private static resolveUrlsInHtml(klass:Class<Component>, base:GenericHtmlElement) : void;
 	private static resolveUrlsInCss(klass:Class<Component>, css:string) : string;
+	private static getUrlFromClass(klass:Class<Component>) : string;
 }
