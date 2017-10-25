@@ -48,7 +48,7 @@ export class ComponentList<T:Component>
 
 export class ComponentTools
 {
-	static processSubstitutions(baseNode:js.html.Node, object:any) : void;
+	static processSubstitutions(doc:js.html.DocumentFragment, object:any) : js.html.DocumentFragment;
 	private static processSubstitution(s:string, object:any) : string;
 	static expandDocElemIDs(prefixID:string, baseNode:GenericHtmlElement) : void;
 	static htmlStringToDocumentFragment(html:string) : js.html.DocumentFragment;

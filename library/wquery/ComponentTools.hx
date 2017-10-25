@@ -2,7 +2,7 @@ package wquery;
 
 @:jsRequire("wquery", "ComponentTools") extern class ComponentTools
 {
-	static function processSubstitutions(baseNode:js.html.Node, object:Dynamic) : Void;
+	static function processSubstitutions(doc:js.html.DocumentFragment, object:Dynamic) : js.html.DocumentFragment;
 	private static function processSubstitution(s:String, object:Dynamic) : String;
 	static function expandDocElemIDs(prefixID:String, baseNode:wquery.GenericHtmlElement) : Void;
 	static function htmlStringToDocumentFragment(html:String) : js.html.DocumentFragment;

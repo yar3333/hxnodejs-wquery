@@ -631,7 +631,7 @@ var wquery_Component = $hx_exports["Component"] = function(parent,parentNode,par
 	wquery_ComponentTools.ensureStylesActive(wquery_ComponentTools.getClassName(js_Boot.getClass(this)),template.css);
 	var node = template.newDoc();
 	try {
-		wquery_ComponentTools.processSubstitutions(node,this);
+		node = wquery_ComponentTools.processSubstitutions(node,this);
 	} catch( e ) {
 		if (e instanceof js__$Boot_HaxeError) e = e.val;
 		if( js_Boot.__instanceof(e,wquery_ComponentInitializationException) ) {
@@ -752,25 +752,15 @@ wquery_ComponentList.prototype = {
 };
 var wquery_ComponentTools = $hx_exports["ComponentTools"] = function() { };
 wquery_ComponentTools.__name__ = ["wquery","ComponentTools"];
-wquery_ComponentTools.processSubstitutions = function(baseNode,object) {
-	var _g = 0;
-	var _g1 = baseNode.childNodes;
-	while(_g < _g1.length) {
-		var node = _g1[_g];
-		++_g;
-		if(node.nodeType == 1) {
-			var _g2 = 0;
-			var _g3 = node.attributes;
-			while(_g2 < _g3.length) {
-				var attr = _g3[_g2];
-				++_g2;
-				attr.value = wquery_ComponentTools.processSubstitution(attr.value,object);
-			}
-			wquery_ComponentTools.processSubstitutions(node,object);
-		} else if(node.nodeType == 3) {
-			node.textContent = wquery_ComponentTools.processSubstitution(node.textContent,object);
-		}
+wquery_ComponentTools.processSubstitutions = function(doc,object) {
+	var elem = window.document.createElement("div");
+	elem.appendChild(doc.cloneNode(true));
+	var oldHtml = elem.innerHTML;
+	var newHtml = wquery_ComponentTools.processSubstitution(oldHtml,object);
+	if(newHtml == oldHtml) {
+		return doc;
 	}
+	return wquery_ComponentTools.htmlStringToDocumentFragment(newHtml);
 };
 wquery_ComponentTools.processSubstitution = function(s,object) {
 	return new EReg("\\{([_a-zA-Z][_a-zA-Z0-9]*)\\}","g").map(s,function(re) {
@@ -801,11 +791,7 @@ wquery_ComponentTools.expandDocElemIDs = function(prefixID,baseNode) {
 	}
 };
 wquery_ComponentTools.htmlStringToDocumentFragment = function(html) {
-	var r = window.document.createDocumentFragment();
-	var div = window.document.createElement("div");
-	div.innerHTML = html;
-	while(div.firstChild) r.appendChild(div.firstChild);
-	return r;
+	return window.document.createRange().createContextualFragment(html);
 };
 wquery_ComponentTools.createChildren = function(parent,node,imports) {
 	var r = [];
@@ -1044,58 +1030,58 @@ wquery_CssGlobalizer.prototype = {
 	,fixJq: function(jq) {
 		var self = this;
 		jq.addClass = function(arg) {
-			var jQuery = jQuery.fn.addClass;
+			var $window = window.jQuery.fn.addClass;
 			var tmp = self.className(arg);
-			var tmp1 = jQuery.call(jq,tmp);
+			var tmp1 = $window.call(jq,tmp);
 			return self.fixJq(tmp1);
 		};
 		jq.removeClass = function(arg1) {
-			var jQuery1 = jQuery.fn.removeClass;
+			var window1 = window.jQuery.fn.removeClass;
 			var tmp2 = self.className(arg1);
-			var tmp3 = jQuery1.call(jq,tmp2);
+			var tmp3 = window1.call(jq,tmp2);
 			return self.fixJq(tmp3);
 		};
 		jq.toggleClass = function(arg2,b) {
-			var jQuery2 = jQuery.fn.toggleClass;
+			var window2 = window.jQuery.fn.toggleClass;
 			var tmp4 = self.className(arg2);
-			var tmp5 = jQuery2.call(jq,tmp4,b);
+			var tmp5 = window2.call(jq,tmp4,b);
 			return self.fixJq(tmp5);
 		};
 		jq.hasClass = function(arg3) {
-			var jQuery3 = jQuery.fn.hasClass;
+			var window3 = window.jQuery.fn.hasClass;
 			var tmp6 = self.className(arg3);
-			return jQuery3.call(jq,tmp6);
+			return window3.call(jq,tmp6);
 		};
 		jq.find = function(arg4) {
-			var jQuery4 = jQuery.fn.find;
+			var window4 = window.jQuery.fn.find;
 			var tmp7 = self.selector(arg4);
-			var tmp8 = jQuery4.call(jq,tmp7);
+			var tmp8 = window4.call(jq,tmp7);
 			return self.fixJq(tmp8);
 		};
 		jq.filter = function(arg5) {
-			var jQuery5 = jQuery.fn.filter;
+			var window5 = window.jQuery.fn.filter;
 			var tmp9 = self.selector(arg5);
-			var tmp10 = jQuery5.call(jq,tmp9);
+			var tmp10 = window5.call(jq,tmp9);
 			return self.fixJq(tmp10);
 		};
 		jq.has = function(arg6) {
-			var jQuery6 = jQuery.fn.has;
+			var window6 = window.jQuery.fn.has;
 			var tmp11 = self.selector(arg6);
-			return jQuery6.call(jq,tmp11);
+			return window6.call(jq,tmp11);
 		};
 		jq["is"] = function(arg7) {
-			var jQuery7 = jQuery.fn["is"];
+			var window7 = window.jQuery.fn["is"];
 			var tmp12 = self.selector(arg7);
-			return jQuery7.call(jq,tmp12);
+			return window7.call(jq,tmp12);
 		};
 		jq.not = function(arg8) {
-			var jQuery8 = jQuery.fn.not;
+			var window8 = window.jQuery.fn.not;
 			var tmp13 = self.selector(arg8);
-			var tmp14 = jQuery8.call(jq,tmp13);
+			var tmp14 = window8.call(jq,tmp13);
 			return self.fixJq(tmp14);
 		};
 		jq.parent = function() {
-			var tmp15 = jQuery.fn.parent.call(jq);
+			var tmp15 = window.jQuery.fn.parent.call(jq);
 			return self.fixJq(tmp15);
 		};
 		return jq;
