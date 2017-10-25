@@ -1235,9 +1235,10 @@ wquery_Template.getRawDoc = function(klass) {
 		if (e instanceof js__$Boot_HaxeError) e = e.val;
 		throw new Error(Type.getClassName(klass) + ":" + Std.string(e.line) + ": characters " + Std.string(e.column) + "-" + Std.string(e.column + e.length) + " : " + Std.string(e.message));
 	}
+	wquery_Template.resolveUrlsInHtml(klass,r);
 	var css = Reflect.field(klass,"rawCSS");
 	if(css != null && css != "") {
-		r.insertBefore(wquery_ComponentTools.createStyleElement(null,css),r.firstChild);
+		r.insertBefore(wquery_ComponentTools.createStyleElement(null,wquery_Template.resolveUrlsInCss(klass,css)),r.firstChild);
 	}
 	return r;
 };
@@ -1302,6 +1303,31 @@ wquery_Template.getImmediateChildren = function(base,tag) {
 	}
 	return r;
 };
+wquery_Template.resolveUrlsInHtml = function(klass,base) {
+	var _g = 0;
+	var _g1 = base.children;
+	while(_g < _g1.length) {
+		var child = _g1[_g];
+		++_g;
+		if(child.tagName == "IMG") {
+			if(child.hasAttribute("src")) {
+				var value = child.getAttribute("src");
+				if(StringTools.startsWith(value,"~/")) {
+					child.setAttribute("src",wquery_Template.baseURL + StringTools.replace(Type.getClassName(klass),".","/") + value.substring(1));
+				}
+			}
+		} else if(child.tagName == "STYLE") {
+			child.innerHTML = wquery_Template.resolveUrlsInCss(klass,child.innerHTML);
+		} else {
+			wquery_Template.resolveUrlsInHtml(klass,child);
+		}
+	}
+};
+wquery_Template.resolveUrlsInCss = function(klass,css) {
+	var _this_r = new RegExp("\\b(url\\s*[(]\\s*)~","ig".split("u").join(""));
+	var by = wquery_Template.baseURL + StringTools.replace(Type.getClassName(klass),".","/");
+	return css.replace(_this_r,by);
+};
 wquery_Template.prototype = {
 	newDoc: function() {
 		return this.preparedDoc.cloneNode(true);
@@ -1332,4 +1358,5 @@ wquery_Application.templates = new haxe_ds_ObjectMap();
 wquery_ComponentTools.classNames = new haxe_ds_ObjectMap();
 wquery_ComponentTools.classNameCounter = 0;
 wquery_EventTools.elemEventNames = ["click","change","load","mousedown","mouseup","mousemove","mouseover","mouseout","mouseenter","mouseleave","keypress","keydown","keyup","focus","blur","focusin","focusout"];
+wquery_Template.baseURL = "";
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

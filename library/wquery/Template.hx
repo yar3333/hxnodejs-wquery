@@ -8,6 +8,7 @@ package wquery;
 	var css(default, null) : String;
 	var imports(default, null) : Dynamic<wquery.Component>;
 	function newDoc() : js.html.DocumentFragment;
+	static var baseURL : String;
 	private static function getImports(klass:Class<wquery.Component>, superKlass:Class<wquery.Component>) : Dynamic<wquery.Component>;
 	private static function getDoc(klass:Class<wquery.Component>, superTemplate:wquery.Template) : js.html.DocumentFragment;
 	private static function getRawDoc(klass:Class<wquery.Component>) : js.html.DocumentFragment;
@@ -15,4 +16,6 @@ package wquery;
 	private static function processStyles(klassName:String, doc:js.html.DocumentFragment) : String;
 	private static function extractChildrenNodes(base:js.html.Element) : js.html.DocumentFragment;
 	private static function getImmediateChildren(base:wquery.GenericHtmlElement, tag:String) : Array<js.html.Element>;
+	private static function resolveUrlsInHtml(klass:Class<wquery.Component>, base:wquery.GenericHtmlElement) : Void;
+	private static function resolveUrlsInCss(klass:Class<wquery.Component>, css:String) : String;
 }

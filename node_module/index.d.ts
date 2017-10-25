@@ -111,6 +111,7 @@ export class Template
 	css : string;
 	imports : any;
 	newDoc() : js.html.DocumentFragment;
+	static baseURL : string;
 	private static getImports(klass:Class<Component>, superKlass:Class<Component>) : any;
 	private static getDoc(klass:Class<Component>, superTemplate:Template) : js.html.DocumentFragment;
 	private static getRawDoc(klass:Class<Component>) : js.html.DocumentFragment;
@@ -118,4 +119,6 @@ export class Template
 	private static processStyles(klassName:string, doc:js.html.DocumentFragment) : string;
 	private static extractChildrenNodes(base:js.html.Element) : js.html.DocumentFragment;
 	private static getImmediateChildren(base:GenericHtmlElement, tag:string) : js.html.Element[];
+	private static resolveUrlsInHtml(klass:Class<Component>, base:GenericHtmlElement) : void;
+	private static resolveUrlsInCss(klass:Class<Component>, css:string) : string;
 }
