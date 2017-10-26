@@ -981,6 +981,7 @@ wquery_ComponentTools.callMethodFromChildrenToParent = function(parent,methodNam
 	wquery_ComponentTools.callMethodIfExists(parent,methodName);
 };
 var wquery_CssGlobalizer = $hx_exports["CssGlobalizer"] = function(klassName) {
+	klassName = klassName.substring(0,klassName.lastIndexOf("."));
 	this.prefix = StringTools.replace(klassName.toLowerCase(),".","_") + "-";
 };
 wquery_CssGlobalizer.__name__ = ["wquery","CssGlobalizer"];
@@ -1310,9 +1311,9 @@ wquery_Template.resolveUrlsInHtml = function(klass,base) {
 	}
 };
 wquery_Template.resolveUrlsInCss = function(klass,css) {
-	var _this_r = new RegExp("\\b(url\\s*[(]\\s*)~","ig".split("u").join(""));
-	var by = wquery_Template.getUrlFromClass(klass);
-	return css.replace(_this_r,by);
+	return new EReg("\\b(url\\s*[(]\\s*)~","ig").map(css,function(re) {
+		return re.matched(1) + wquery_Template.getUrlFromClass(klass);
+	});
 };
 wquery_Template.getUrlFromClass = function(klass) {
 	var r = Type.getClassName(klass);
