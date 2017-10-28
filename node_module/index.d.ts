@@ -41,6 +41,7 @@ export class ComponentList<T:Component>
 	private components : T[];
 	length : number;
 	create(params?:any, append?:boolean) : T;
+	remove(item:T) : boolean;
 	clear() : void;
 	iterator() : Iterator<T>;
 	getByIndex(n:number) : T;

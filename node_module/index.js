@@ -727,6 +727,16 @@ wquery_ComponentList.prototype = {
 		this.length++;
 		return r;
 	}
+	,remove: function(item) {
+		var n = this.components.indexOf(item);
+		if(n < 0) {
+			return false;
+		}
+		this.components[n].remove();
+		this.components.splice(n,1);
+		this.length--;
+		return true;
+	}
 	,clear: function() {
 		if(this.components.length == 0) {
 			return;

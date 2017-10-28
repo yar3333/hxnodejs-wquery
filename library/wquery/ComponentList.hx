@@ -10,6 +10,7 @@ package wquery;
 	private var components : Array<T>;
 	var length(default, null) : Int;
 	function create(?params:Dynamic, ?append:Bool) : T;
+	function remove(item:T) : Bool;
 	function clear() : Void;
 	function iterator() : Iterator<T>;
 	function getByIndex(n:Int) : T;
