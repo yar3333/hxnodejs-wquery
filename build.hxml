@@ -5,5 +5,6 @@
 --macro include("wquery")
 --macro CodeGen.includePrivateMembers()
 --macro CodeGen.include("wquery")
+--macro CodeGen.removeTypeMeta(":autoBuild")
 --macro CodeGen.haxeExtern('wquery', '', 'library')
 --macro CodeGen.typescriptExtern('node_module/index.d.ts')
