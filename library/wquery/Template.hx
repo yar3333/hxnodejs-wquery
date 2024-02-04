@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "wquery.Template") extern class Template {
+@:jsRequire("wquery", "Template") extern class Template {
 	function new(klass:Class<wquery.Component>):Void;
 	private var doc : js.html.DocumentFragment;
 	private var preparedDoc : js.html.DocumentFragment;

@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "wquery.Event") extern class Event<EventArgsType> {
+@:jsRequire("wquery", "Event") extern class Event<EventArgsType> {
 	function new():Void;
 	private var handlers : Array<EventArgsType -> Void>;
 	function on(handler:EventArgsType -> Void):Void;

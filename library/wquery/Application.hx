@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "wquery.Application") extern class Application {
+@:jsRequire("wquery", "Application") extern class Application {
 	private static var templates : js.lib.Map<Dynamic, wquery.Template>;
 	@:allow(wquery.Component)
 	@:allow(wquery.Template)
