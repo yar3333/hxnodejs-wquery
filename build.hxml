@@ -2,7 +2,6 @@
 --library wquery
 --library codegen
 --dce full
---macro include("wquery")
 --macro CodeGen.includePrivateMembers()
 --macro CodeGen.exposeToRoot("wquery")
 --macro CodeGen.haxeExtern('library', 'wquery')
