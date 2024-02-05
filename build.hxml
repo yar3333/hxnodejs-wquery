@@ -4,5 +4,5 @@
 --dce full
 --macro CodeGen.includePrivateMembers()
 --macro CodeGen.exposeToRoot("wquery")
---macro CodeGen.haxeExtern('library', 'wquery')
---macro CodeGen.typescriptExtern('node_module/index.d.ts')
+--macro CodeGen.haxeExtern("library", "wquery")
+--macro CodeGen.typescriptExtern("node_module/index.d.ts")
