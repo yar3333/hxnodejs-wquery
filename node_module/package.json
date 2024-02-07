@@ -5,5 +5,10 @@
   "main": "index.js",
   "keywords": [ "web", "framework", "component", "components" ],
   "author": "yar3333",
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/yar3333/hxnodejs-wquery",
+  "repository": {
+    "type": "git",
+    "url": "github.com:yar3333/hxnodejs-wquery"
+  }
 }
