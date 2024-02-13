@@ -17,17 +17,22 @@ class Macro
 		
 		var dir = haxe.io.Path.directory(Context.resolvePath(Context.getLocalModule().replace(".", "/") + ".hx")) + "/";
 		
-		if (sys.FileSystem.exists(dir + "template.html") && !fields.exists(function(f) return f.name == "rawHTML"))
+		if (sys.FileSystem.exists(dir + "template.html") && !fields.exists(f -> f.name == "rawHTML"))
 		{
 			fields.push(makeStaticVar("rawHTML", macro : String, macro $v{sys.io.File.getContent(dir + "template.html")}));
 		}
+
+        if (sys.FileSystem.exists(dir + "template.less") && !fields.exists(f -> f.name == "rawCSS") && (!sys.FileSystem.exists(dir + "template.css") || sys.FileSystem.stat(dir + "template.css").mtime.getTime() < sys.FileSystem.stat(dir + "template.less").mtime.getTime()))
+        {
+            try { Sys.command("lessc", [ dir + "template.less", dir + "template.css" ]); } catch (_) {}
+        }
 		
-		if (sys.FileSystem.exists(dir + "template.css") && !fields.exists(function(f) return f.name == "rawCSS"))
+		if (sys.FileSystem.exists(dir + "template.css") && !fields.exists(f -> f.name == "rawCSS"))
 		{
 			fields.push(makeStaticVar("rawCSS", macro : String, macro $v{sys.io.File.getContent(dir + "template.css")}));
 		}
 		
-		if (sys.FileSystem.exists(dir + "Template.hx") && !fields.exists(function(f) return f.name == "template"))
+		if (sys.FileSystem.exists(dir + "Template.hx") && !fields.exists(f -> f.name == "template"))
 		{
 			fields.push(makeOverridenMethod("template", [], macro : Template, macro return new Template(this)));
 		}
