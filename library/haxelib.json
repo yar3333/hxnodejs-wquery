@@ -4,8 +4,8 @@
   "tags": ["js","web","framework","node","nodejs"],
   "description": "Modern and light component-oriented web framework.",
   "contributors": ["yar3333"],
-  "releasenote": "Init.",
-  "version": "1.1.0",
+  "releasenote": "Support `less` compiler.",
+  "version": "1.1.1",
   "url": "https://github.com/yar3333/hxnodejs-wquery",
   "dependencies": {"jquery":""}
 }

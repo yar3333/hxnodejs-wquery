@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "ComponentTools") extern class ComponentTools {
+@:jsRequire("hxnodejs-wquery", "ComponentTools") extern class ComponentTools {
 	static function processSubstitutions(doc:js.html.DocumentFragment, object:Dynamic):js.html.DocumentFragment;
 	private static function processSubstitution(s:String, object:Dynamic):String;
 	static function expandDocElemIDs(prefixID:String, baseNode:wquery.GenericHtmlElement):Void;

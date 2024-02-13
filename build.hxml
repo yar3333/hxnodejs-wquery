@@ -1,9 +1,9 @@
 --js node_module/index.js
 --library wquery
 --library codegen
---dce full
+--dce std
 --macro CodeGen.copyAfterGeneration("wquery.Macro")
 --macro CodeGen.includePrivateMembers()
 --macro CodeGen.exposeToRoot("wquery")
---macro CodeGen.haxeExtern("library", "wquery")
+--macro CodeGen.haxeExtern("library", "hxnodejs-wquery")
 --macro CodeGen.typescriptExtern("node_module/index.d.ts")

@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "ComponentList") extern class ComponentList<T:(wquery.Component)> {
+@:jsRequire("hxnodejs-wquery", "ComponentList") extern class ComponentList<T:(wquery.Component)> {
 	function new(type:Class<T>, parentComponent:wquery.Component, parentNode:js.JQuery, ?paramsList:Array<Dynamic>):Void;
 	private var type : Class<T>;
 	private var parentComponent : wquery.Component;

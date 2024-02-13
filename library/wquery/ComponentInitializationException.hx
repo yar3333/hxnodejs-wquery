@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "ComponentInitializationException") extern class ComponentInitializationException {
+@:jsRequire("hxnodejs-wquery", "ComponentInitializationException") extern class ComponentInitializationException {
 	function new(message:String):Void;
 	var message(default, null) : String;
 }

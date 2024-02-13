@@ -1,6 +1,6 @@
 package wquery;
 
-@:jsRequire("wquery", "CssGlobalizer") extern class CssGlobalizer {
+@:jsRequire("hxnodejs-wquery", "CssGlobalizer") extern class CssGlobalizer {
 	function new(klassName:String):Void;
 	var prefix : String;
 	function className(name:String):String;
